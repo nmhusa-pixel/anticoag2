@@ -1,10 +1,10 @@
-const CACHE_NAME = "anticoag-v2-v24-remove-mild";
+const CACHE_NAME = "anticoag-guideline-v25-title";
 const APP_SHELL = [
   "./",
   "./index.html",
-  "./styles.css?v=24",
-  "./app.js?v=24",
-  "./manifest.webmanifest?v=24",
+  "./styles.css?v=25",
+  "./app.js?v=25",
+  "./manifest.webmanifest?v=25",
   "./assets/icons/icon.svg",
   "./assets/icons/icon-192-v5.png",
   "./assets/icons/icon-192-maskable-v5.png",

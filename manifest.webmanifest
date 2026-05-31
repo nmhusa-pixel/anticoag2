@@ -1,6 +1,6 @@
 {
-  "name": "Anticoag V2",
-  "short_name": "Anticoag V2",
+  "name": "Anticoag Guideline",
+  "short_name": "Anticoag",
   "id": "./?app=v5",
   "description": "Clinical timing aid for anticoagulant and antiplatelet holds before regional and pain medicine procedures.",
   "start_url": "./index.html?app=v5",
