@@ -1,5 +1,5 @@
 const HOUR = 60 * 60 * 1000;
-const APP_BUILD = "Build v20";
+const APP_BUILD = "Build v21";
 
 const procedureTypes = {
   neuraxial: {
@@ -68,6 +68,18 @@ const procedureTypes = {
     risk: "high",
     text: "High-risk pain procedure: stellate ganglion block."
   },
+  trigeminalBlock: {
+    label: "Trigeminal ganglion block",
+    group: "High-risk pain procedures",
+    risk: "high",
+    text: "High-risk pain procedure: trigeminal ganglion block."
+  },
+  sphenopalatineBlock: {
+    label: "Sphenopalatine ganglion block",
+    group: "High-risk pain procedures",
+    risk: "high",
+    text: "High-risk pain procedure: sphenopalatine ganglion block."
+  },
   interlaminarEsi: {
     label: "Lumbar/thoracic interlaminar epidural steroid injection",
     group: "Medium-risk pain procedures",
@@ -97,18 +109,6 @@ const procedureTypes = {
     group: "Medium-risk pain procedures",
     risk: "intermediate",
     text: "Medium/intermediate-risk pain procedure: sympathetic block."
-  },
-  trigeminalBlock: {
-    label: "Trigeminal ganglion block",
-    group: "Medium-risk pain procedures",
-    risk: "intermediate",
-    text: "Medium/intermediate-risk pain procedure: trigeminal ganglion block."
-  },
-  sphenopalatineBlock: {
-    label: "Sphenopalatine ganglion block",
-    group: "Medium-risk pain procedures",
-    risk: "intermediate",
-    text: "Medium/intermediate-risk pain procedure: sphenopalatine ganglion block."
   },
   peripheralNerveBlock: {
     label: "Peripheral nerve block",
@@ -727,7 +727,7 @@ el.resetButton.addEventListener("click", resetDefaults);
 
 if ("serviceWorker" in navigator && ["http:", "https:"].includes(window.location.protocol)) {
   window.addEventListener("load", () => {
-    navigator.serviceWorker.register("./sw.js?v=20").then((registration) => {
+    navigator.serviceWorker.register("./sw.js?v=21").then((registration) => {
       registration.update();
     }).catch(() => {
       // The app still works online when service worker registration is unavailable.
