@@ -1,5 +1,5 @@
 const HOUR = 60 * 60 * 1000;
-const APP_BUILD = "Build v21";
+const APP_BUILD = "Build v22";
 
 const procedureTypes = {
   neuraxial: {
@@ -43,6 +43,12 @@ const procedureTypes = {
     group: "High-risk pain procedures",
     risk: "high",
     text: "High-risk pain procedure: percutaneous decompression laminotomy."
+  },
+  minimallyInvasiveLumbarDecompression: {
+    label: "Minimally invasive lumbar decompression",
+    group: "High-risk pain procedures",
+    risk: "high",
+    text: "High-risk pain procedure: minimally invasive lumbar decompression."
   },
   epiduroscopy: {
     label: "Epiduroscopy or epidural decompression",
@@ -727,7 +733,7 @@ el.resetButton.addEventListener("click", resetDefaults);
 
 if ("serviceWorker" in navigator && ["http:", "https:"].includes(window.location.protocol)) {
   window.addEventListener("load", () => {
-    navigator.serviceWorker.register("./sw.js?v=21").then((registration) => {
+    navigator.serviceWorker.register("./sw.js?v=22").then((registration) => {
       registration.update();
     }).catch(() => {
       // The app still works online when service worker registration is unavailable.
