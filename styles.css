@@ -1,15 +1,16 @@
 :root {
-  --bg: #f5f7f8;
-  --ink: #17202a;
-  --muted: #60707f;
-  --line: #d8e0e5;
+  --bg: #f2f5f3;
+  --ink: #1d2730;
+  --muted: #65737c;
+  --line: #d5dedb;
   --panel: #ffffff;
-  --green: #197a55;
-  --amber: #a65f00;
-  --red: #b02a37;
-  --blue: #245b8f;
+  --green: #18705a;
+  --amber: #b66c22;
+  --red: #bd4144;
+  --blue: #315c6d;
   --teal: #0f766e;
-  --shadow: 0 18px 60px rgba(25, 42, 62, 0.12);
+  --plum: #74435f;
+  --shadow: 0 22px 68px rgba(36, 48, 56, 0.14);
 }
 
 * {
@@ -21,8 +22,9 @@ body {
   min-height: 100vh;
   color: var(--ink);
   background:
-    linear-gradient(90deg, rgba(36, 91, 143, 0.08), transparent 32%),
-    linear-gradient(180deg, #eef4f5 0, var(--bg) 280px);
+    radial-gradient(circle at 16% 0%, rgba(15, 118, 110, 0.14), transparent 34%),
+    linear-gradient(110deg, rgba(116, 67, 95, 0.11), transparent 38%),
+    linear-gradient(180deg, #edf4f0 0, var(--bg) 300px);
   font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
 
@@ -65,7 +67,7 @@ a {
 
 .eyebrow {
   margin-bottom: 7px;
-  color: var(--teal);
+  color: var(--plum);
   font-size: 0.76rem;
   font-weight: 800;
   letter-spacing: 0.08em;
@@ -83,7 +85,7 @@ a {
 
 .tool-panel,
 .reference-panel {
-  background: rgba(255, 255, 255, 0.92);
+  background: rgba(255, 255, 255, 0.94);
   border: 1px solid var(--line);
   border-radius: 8px;
   box-shadow: var(--shadow);
@@ -111,7 +113,7 @@ a {
   min-height: 42px;
   border: 1px solid var(--line);
   background: var(--panel);
-  color: var(--muted);
+  color: var(--blue);
   border-radius: 999px;
 }
 
@@ -171,6 +173,11 @@ input:disabled {
   cursor: not-allowed;
 }
 
+optgroup {
+  color: var(--blue);
+  font-weight: 850;
+}
+
 .segmented {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -189,7 +196,7 @@ input:disabled {
   padding: 10px 12px;
   border: 1px solid var(--line);
   border-radius: 6px;
-  background: #f9fbfc;
+  background: #f8fbfa;
   color: var(--ink);
 }
 
@@ -208,14 +215,14 @@ input:disabled {
   padding: 12px;
   border: 1px solid var(--line);
   border-radius: 8px;
-  background: #f9fbfc;
+  background: linear-gradient(90deg, #f7fbfa, #fbf8f9);
 }
 
 .risk-summary span {
   min-width: 108px;
   padding: 8px 10px;
   border-radius: 999px;
-  background: var(--blue);
+  background: var(--plum);
   color: #fff;
   font-size: 0.75rem;
   font-weight: 850;
@@ -326,7 +333,7 @@ input[type="checkbox"] {
   width: 0%;
   height: 100%;
   border-radius: inherit;
-  background: linear-gradient(90deg, var(--teal), var(--green));
+  background: linear-gradient(90deg, var(--plum), var(--teal), var(--green));
   transition: width 180ms ease;
 }
 
@@ -353,19 +360,50 @@ input[type="checkbox"] {
 
 .spine-visual {
   position: absolute;
-  top: -22px;
-  right: -30px;
-  display: grid;
-  gap: 8px;
-  opacity: 0.18;
-  transform: rotate(-16deg);
+  top: 18px;
+  right: -8px;
+  width: 148px;
+  height: 148px;
+  opacity: 0.16;
+  transform: rotate(-28deg);
 }
 
 .spine-visual span {
-  width: 118px;
-  height: 34px;
-  border: 6px solid var(--blue);
-  border-radius: 50%;
+  position: absolute;
+  display: block;
+  border-radius: 999px;
+  background: var(--blue);
+}
+
+.spine-visual span:nth-child(1) {
+  left: 12px;
+  top: 66px;
+  width: 116px;
+  height: 14px;
+}
+
+.spine-visual span:nth-child(2) {
+  left: 108px;
+  top: 52px;
+  width: 42px;
+  height: 42px;
+  background: var(--red);
+}
+
+.spine-visual span:nth-child(3) {
+  left: 0;
+  top: 56px;
+  width: 36px;
+  height: 36px;
+  background: var(--teal);
+}
+
+.spine-visual span:nth-child(4) {
+  left: -18px;
+  top: 41px;
+  width: 22px;
+  height: 66px;
+  background: var(--plum);
 }
 
 .quiet {
@@ -380,7 +418,7 @@ input[type="checkbox"] {
   padding: 16px;
   border: 1px solid var(--line);
   border-radius: 8px;
-  background: #f9fbfc;
+  background: #f8fbfa;
 }
 
 .rule-card p:last-child,

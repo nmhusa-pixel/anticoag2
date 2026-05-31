@@ -3,23 +3,147 @@ const HOUR = 60 * 60 * 1000;
 const procedureTypes = {
   neuraxial: {
     label: "Regional / deep plexus block",
+    group: "Regional",
     risk: "neuraxial",
     text: "Uses ASRA fifth-edition regional/deep plexus timing."
   },
-  painHigh: {
-    label: "Pain procedure - high risk",
+  scsTrial: {
+    label: "Spinal cord stimulation trial",
+    group: "High-risk pain procedures",
     risk: "high",
-    text: "Examples: spinal cord stimulation trial/implant, DRG stimulation, intrathecal catheter/pump implant, vertebroplasty/kyphoplasty, percutaneous decompression laminotomy, epiduroscopy or epidural decompression."
+    text: "High-risk pain procedure: spinal cord stimulation trial."
   },
-  painIntermediate: {
-    label: "Pain procedure - medium risk (intermediate)",
+  scsImplant: {
+    label: "Spinal cord stimulation implant or revision",
+    group: "High-risk pain procedures",
+    risk: "high",
+    text: "High-risk pain procedure: spinal cord stimulation implant or revision."
+  },
+  drgStimulation: {
+    label: "Dorsal root ganglion stimulation",
+    group: "High-risk pain procedures",
+    risk: "high",
+    text: "High-risk pain procedure: dorsal root ganglion stimulation."
+  },
+  intrathecalPump: {
+    label: "Intrathecal catheter or pump implant",
+    group: "High-risk pain procedures",
+    risk: "high",
+    text: "High-risk pain procedure: intrathecal catheter or pump implantation."
+  },
+  vertebralAugmentation: {
+    label: "Vertebroplasty or kyphoplasty",
+    group: "High-risk pain procedures",
+    risk: "high",
+    text: "High-risk pain procedure: vertebral augmentation."
+  },
+  decompressionLaminotomy: {
+    label: "Percutaneous decompression laminotomy",
+    group: "High-risk pain procedures",
+    risk: "high",
+    text: "High-risk pain procedure: percutaneous decompression laminotomy."
+  },
+  epiduroscopy: {
+    label: "Epiduroscopy or epidural decompression",
+    group: "High-risk pain procedures",
+    risk: "high",
+    text: "High-risk pain procedure: epiduroscopy or epidural decompression."
+  },
+  interlaminarEsi: {
+    label: "Interlaminar epidural steroid injection",
+    group: "Medium-risk pain procedures",
     risk: "intermediate",
-    text: "Examples: interlaminar ESI, transforaminal ESI, cervical facet medial branch block/RFA, intradiscal procedures, sympathetic blocks, trigeminal or sphenopalatine ganglion blocks."
+    text: "Medium/intermediate-risk pain procedure: interlaminar epidural steroid injection."
   },
-  painLow: {
-    label: "Pain procedure - low risk",
+  transforaminalEsi: {
+    label: "Transforaminal epidural steroid injection",
+    group: "Medium-risk pain procedures",
+    risk: "intermediate",
+    text: "Medium/intermediate-risk pain procedure: transforaminal epidural steroid injection."
+  },
+  cervicalFacet: {
+    label: "Cervical facet medial branch block or RFA",
+    group: "Medium-risk pain procedures",
+    risk: "intermediate",
+    text: "Medium/intermediate-risk pain procedure: cervical facet medial branch block or radiofrequency ablation."
+  },
+  intradiscal: {
+    label: "Intradiscal procedure",
+    group: "Medium-risk pain procedures",
+    risk: "intermediate",
+    text: "Medium/intermediate-risk pain procedure: intradiscal procedure."
+  },
+  sympatheticBlock: {
+    label: "Sympathetic block",
+    group: "Medium-risk pain procedures",
+    risk: "intermediate",
+    text: "Medium/intermediate-risk pain procedure: sympathetic block."
+  },
+  trigeminalBlock: {
+    label: "Trigeminal ganglion block",
+    group: "Medium-risk pain procedures",
+    risk: "intermediate",
+    text: "Medium/intermediate-risk pain procedure: trigeminal ganglion block."
+  },
+  sphenopalatineBlock: {
+    label: "Sphenopalatine ganglion block",
+    group: "Medium-risk pain procedures",
+    risk: "intermediate",
+    text: "Medium/intermediate-risk pain procedure: sphenopalatine ganglion block."
+  },
+  stellateGanglion: {
+    label: "Stellate ganglion block",
+    group: "Medium-risk pain procedures",
+    risk: "intermediate",
+    text: "Medium/intermediate-risk pain procedure: stellate ganglion block."
+  },
+  peripheralNerveBlock: {
+    label: "Peripheral nerve block",
+    group: "Low-risk pain procedures",
     risk: "low",
-    text: "Examples: peripheral nerve blocks, peripheral joint or musculoskeletal injections, trigger point or piriformis injections, SI joint injection, sacral lateral branch blocks, thoracic/lumbar facet medial branch block/RFA, many peripheral nerve stimulation procedures."
+    text: "Low-risk pain procedure: peripheral nerve block."
+  },
+  jointInjection: {
+    label: "Peripheral joint or musculoskeletal injection",
+    group: "Low-risk pain procedures",
+    risk: "low",
+    text: "Low-risk pain procedure: peripheral joint or musculoskeletal injection."
+  },
+  triggerPoint: {
+    label: "Trigger point injection",
+    group: "Low-risk pain procedures",
+    risk: "low",
+    text: "Low-risk pain procedure: trigger point injection."
+  },
+  piriformis: {
+    label: "Piriformis injection",
+    group: "Low-risk pain procedures",
+    risk: "low",
+    text: "Low-risk pain procedure: piriformis injection."
+  },
+  siJoint: {
+    label: "Sacroiliac joint injection",
+    group: "Low-risk pain procedures",
+    risk: "low",
+    text: "Low-risk pain procedure: sacroiliac joint injection."
+  },
+  sacralLateralBranch: {
+    label: "Sacral lateral branch block or RFA",
+    group: "Low-risk pain procedures",
+    risk: "low",
+    text: "Low-risk pain procedure: sacral lateral branch block or radiofrequency ablation."
+  },
+  thoracolumbarFacet: {
+    label: "Thoracic or lumbar facet medial branch block or RFA",
+    group: "Low-risk pain procedures",
+    risk: "low",
+    text: "Low-risk pain procedure: thoracic or lumbar facet medial branch block or radiofrequency ablation."
+  },
+  peripheralNerveStim: {
+    label: "Peripheral nerve stimulation",
+    group: "Low-risk pain procedures",
+    risk: "low",
+    text: "Low-risk pain procedure: peripheral nerve stimulation."
   }
 };
 
@@ -292,11 +416,18 @@ function selectedContext() {
 }
 
 function populateProcedures() {
+  const groups = new Map();
   Object.entries(procedureTypes).forEach(([id, procedure]) => {
+    if (!groups.has(procedure.group)) {
+      const optgroup = document.createElement("optgroup");
+      optgroup.label = procedure.group;
+      groups.set(procedure.group, optgroup);
+      el.procedureType.append(optgroup);
+    }
     const option = document.createElement("option");
     option.value = id;
     option.textContent = procedure.label;
-    el.procedureType.append(option);
+    groups.get(procedure.group).append(option);
   });
 }
 

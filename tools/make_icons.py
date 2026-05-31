@@ -34,68 +34,100 @@ def blend(base, overlay):
     return tuple(int(overlay[i] * alpha + base[i] * (1 - alpha)) for i in range(3)) + (255,)
 
 
-def in_rotated_rect(x, y, cx, cy, width, height, angle):
-    ca = math.cos(angle)
-    sa = math.sin(angle)
-    dx = x - cx
-    dy = y - cy
-    rx = dx * ca + dy * sa
-    ry = -dx * sa + dy * ca
-    return abs(rx) <= width / 2 and abs(ry) <= height / 2
+def inside_round_rect(px, py, x, y, w, h, r):
+    dx = max(x - px, 0, px - (x + w))
+    dy = max(y - py, 0, py - (y + h))
+    if dx == 0 and dy == 0:
+        corner_x = min(px - x, x + w - px)
+        corner_y = min(py - y, y + h - py)
+        if corner_x < r and corner_y < r:
+            return (r - corner_x) ** 2 + (r - corner_y) ** 2 <= r ** 2
+        return True
+    return dx * dx + dy * dy <= r * r
+
+
+def inside_ellipse(px, py, cx, cy, rx, ry):
+    return ((px - cx) / rx) ** 2 + ((py - cy) / ry) ** 2 <= 1
+
+
+def inside_poly(px, py, points):
+    inside = False
+    j = len(points) - 1
+    for i in range(len(points)):
+        xi, yi = points[i]
+        xj, yj = points[j]
+        intersects = (yi > py) != (yj > py) and px < (xj - xi) * (py - yi) / (yj - yi + 1e-9) + xi
+        if intersects:
+            inside = not inside
+        j = i
+    return inside
+
+
+def stroke_near_segment(px, py, ax, ay, bx, by, width):
+    vx = bx - ax
+    vy = by - ay
+    length_sq = vx * vx + vy * vy
+    if length_sq == 0:
+      return False
+    t = max(0, min(1, ((px - ax) * vx + (py - ay) * vy) / length_sq))
+    cx = ax + t * vx
+    cy = ay + t * vy
+    return (px - cx) ** 2 + (py - cy) ** 2 <= (width / 2) ** 2
 
 
 def make_icon(size, maskable=False):
-    blue = (36, 91, 143, 255)
-    white = (255, 255, 255, 255)
-    pale = (238, 244, 245, 255)
-    teal = (15, 118, 110, 255)
-    steel = (216, 224, 229, 255)
-    ink = (23, 32, 42, 255)
-    red = (176, 42, 55, 255)
-    highlight = (255, 255, 255, 140)
+    bg = (16, 24, 32, 255)
+    panel = (24, 37, 48, 255)
+    teal = (49, 92, 109, 255)
+    bone = (223, 248, 255, 255)
+    glow = (135, 215, 233, 255)
+    soft = (135, 215, 233, 80)
 
-    center = size / 2
-    panel_r = size * (0.35 if maskable else 0.39)
-    angle = -math.pi / 4
     pixels = []
+    scale = size / 512
+    safe = 58 * scale if maskable else 36 * scale
+    panel_rect = (safe, safe, size - safe * 2, size - safe * 2, 56 * scale)
+    center = size / 2
+
+    vertebrae = [
+        [(219, 118), (293, 118), (311, 149), (294, 179), (219, 179), (201, 149)],
+        [(213, 184), (299, 184), (321, 218), (300, 252), (213, 252), (191, 218)],
+        [(208, 258), (304, 258), (328, 296), (304, 335), (208, 335), (184, 296)],
+        [(203, 346), (309, 346), (340, 390), (303, 432), (209, 432), (172, 390)],
+    ]
+    vertebrae = [[(x * scale, y * scale) for x, y in poly] for poly in vertebrae]
 
     for y in range(size):
         for x in range(size):
             px = x + 0.5
             py = y + 0.5
-            dx = px - center
-            dy = py - center
-            dist = (dx * dx + dy * dy) ** 0.5
-            color = blue
+            color = bg
 
-            if dist <= panel_r:
-                color = white
+            if inside_round_rect(px, py, *panel_rect):
+                color = panel
 
-            if in_rotated_rect(px, py, size * 0.48, size * 0.53, size * 0.43, size * 0.075, angle):
-                color = steel
-            if in_rotated_rect(px, py, size * 0.48, size * 0.53, size * 0.34, size * 0.035, angle):
-                color = pale
+            if inside_ellipse(px, py, center, center, 170 * scale, 170 * scale):
+                color = blend(color, soft)
 
-            if in_rotated_rect(px, py, size * 0.30, size * 0.71, size * 0.12, size * 0.075, angle):
-                color = teal
-            if in_rotated_rect(px, py, size * 0.24, size * 0.78, size * 0.16, size * 0.052, angle):
-                color = teal
+            for poly in vertebrae:
+                if inside_poly(px, py, poly):
+                    color = bone
 
-            if in_rotated_rect(px, py, size * 0.69, size * 0.36, size * 0.19, size * 0.035, angle):
-                color = ink
-            if in_rotated_rect(px, py, size * 0.75, size * 0.30, size * 0.11, size * 0.018, angle):
-                color = ink
+            for poly in vertebrae:
+                if any(stroke_near_segment(px, py, *poly[i], *poly[(i + 1) % len(poly)], 10 * scale) for i in range(len(poly))):
+                    color = glow
 
-            drop_cx = size * 0.78
-            drop_cy = size * 0.56
-            drop_r = size * 0.077
-            drop_dx = px - drop_cx
-            drop_dy = py - drop_cy
-            drop_dist = (drop_dx * drop_dx + drop_dy * drop_dy) ** 0.5
-            if drop_dist <= drop_r or (abs(drop_dx) <= drop_r * 0.42 and -drop_r * 1.35 <= drop_dy <= 0):
-                color = red
-            if (px - size * 0.755) ** 2 + (py - size * 0.535) ** 2 <= (size * 0.018) ** 2:
-                color = blend(color, highlight)
+            if (
+                stroke_near_segment(px, py, 185 * scale, 150 * scale, 118 * scale, 282 * scale, 15 * scale)
+                or stroke_near_segment(px, py, 327 * scale, 150 * scale, 394 * scale, 282 * scale, 15 * scale)
+                or stroke_near_segment(px, py, 169 * scale, 391 * scale, 256 * scale, 356 * scale, 15 * scale)
+                or stroke_near_segment(px, py, 256 * scale, 356 * scale, 343 * scale, 391 * scale, 15 * scale)
+            ):
+                color = bone
+
+            for cx, cy, r in [(256, 149, 10), (256, 218, 11), (256, 297, 12), (256, 391, 13)]:
+                if inside_ellipse(px, py, cx * scale, cy * scale, r * scale, r * scale):
+                    color = glow
 
             pixels.append(color)
 
@@ -105,12 +137,9 @@ def make_icon(size, maskable=False):
 def main():
     ICON_DIR.mkdir(parents=True, exist_ok=True)
     for size in (192, 512):
-        (ICON_DIR / f"icon-{size}.png").write_bytes(make_icon(size))
-        (ICON_DIR / f"icon-{size}-maskable.png").write_bytes(make_icon(size, maskable=True))
-        (ICON_DIR / f"icon-{size}-v2.png").write_bytes(make_icon(size))
-        (ICON_DIR / f"icon-{size}-maskable-v2.png").write_bytes(make_icon(size, maskable=True))
-        (ICON_DIR / f"icon-{size}-v3.png").write_bytes(make_icon(size))
-        (ICON_DIR / f"icon-{size}-maskable-v3.png").write_bytes(make_icon(size, maskable=True))
+        for version in ("", "-v2", "-v3", "-v4"):
+            (ICON_DIR / f"icon-{size}{version}.png").write_bytes(make_icon(size))
+            (ICON_DIR / f"icon-{size}-maskable{version}.png").write_bytes(make_icon(size, maskable=True))
 
 
 if __name__ == "__main__":
