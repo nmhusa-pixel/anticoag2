@@ -1,5 +1,5 @@
 const HOUR = 60 * 60 * 1000;
-const APP_BUILD = "Build v25";
+const APP_BUILD = "Build v26";
 
 const procedureTypes = {
   neuraxial: {
@@ -739,7 +739,7 @@ el.resetButton.addEventListener("click", resetDefaults);
 
 if ("serviceWorker" in navigator && ["http:", "https:"].includes(window.location.protocol)) {
   window.addEventListener("load", () => {
-    navigator.serviceWorker.register("./sw.js?v=25").then((registration) => {
+    navigator.serviceWorker.register("./sw.js?v=26").then((registration) => {
       registration.update();
     }).catch(() => {
       // The app still works online when service worker registration is unavailable.
