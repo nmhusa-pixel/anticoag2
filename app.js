@@ -1,5 +1,5 @@
 const HOUR = 60 * 60 * 1000;
-const APP_BUILD = "Build v19";
+const APP_BUILD = "Build v20";
 
 const procedureTypes = {
   neuraxial: {
@@ -50,17 +50,35 @@ const procedureTypes = {
     risk: "high",
     text: "High-risk pain procedure: epiduroscopy or epidural decompression."
   },
+  cervicalInterlaminarEsi: {
+    label: "Cervical interlaminar epidural steroid injection",
+    group: "High-risk pain procedures",
+    risk: "high",
+    text: "High-risk pain procedure: cervical interlaminar epidural steroid injection."
+  },
+  cervicalTransforaminalEsi: {
+    label: "Cervical transforaminal epidural steroid injection",
+    group: "High-risk pain procedures",
+    risk: "high",
+    text: "High-risk pain procedure: cervical transforaminal epidural steroid injection."
+  },
+  stellateGanglion: {
+    label: "Stellate ganglion block",
+    group: "High-risk pain procedures",
+    risk: "high",
+    text: "High-risk pain procedure: stellate ganglion block."
+  },
   interlaminarEsi: {
-    label: "Interlaminar epidural steroid injection",
+    label: "Lumbar/thoracic interlaminar epidural steroid injection",
     group: "Medium-risk pain procedures",
     risk: "intermediate",
-    text: "Medium/intermediate-risk pain procedure: interlaminar epidural steroid injection."
+    text: "Medium/intermediate-risk pain procedure: lumbar or thoracic interlaminar epidural steroid injection."
   },
   transforaminalEsi: {
-    label: "Transforaminal epidural steroid injection",
+    label: "Lumbar/thoracic transforaminal epidural steroid injection",
     group: "Medium-risk pain procedures",
     risk: "intermediate",
-    text: "Medium/intermediate-risk pain procedure: transforaminal epidural steroid injection."
+    text: "Medium/intermediate-risk pain procedure: lumbar or thoracic transforaminal epidural steroid injection."
   },
   cervicalFacet: {
     label: "Cervical facet medial branch block or RFA",
@@ -91,12 +109,6 @@ const procedureTypes = {
     group: "Medium-risk pain procedures",
     risk: "intermediate",
     text: "Medium/intermediate-risk pain procedure: sphenopalatine ganglion block."
-  },
-  stellateGanglion: {
-    label: "Stellate ganglion block",
-    group: "Medium-risk pain procedures",
-    risk: "intermediate",
-    text: "Medium/intermediate-risk pain procedure: stellate ganglion block."
   },
   peripheralNerveBlock: {
     label: "Peripheral nerve block",
@@ -488,7 +500,7 @@ function painProcedureGuidance(ruleId, rule, params) {
   if (ruleId === "aspirin") {
     guidance.holdHours = risk === "high" ? 6 * 24 : 0;
     guidance.restartHours = 24;
-    guidance.rangeText = risk === "high" ? "6 days for primary prophylaxis; shared decision if secondary prophylaxis" : risk === "intermediate" ? "Shared assessment; consider hold for cervical interlaminar ESI or stellate ganglion block" : "No routine hold";
+    guidance.rangeText = risk === "high" ? "6 days for primary prophylaxis; shared decision if secondary prophylaxis" : risk === "intermediate" ? "Shared assessment for medium-risk pain procedures" : "No routine hold";
     guidance.notes.push("For aspirin used for secondary prevention, coordinate the decision with the prescribing clinician.");
   } else if (ruleId === "clopidogrel") {
     guidance.holdHours = highOrIntermediate ? 7 * 24 : 0;
@@ -715,7 +727,7 @@ el.resetButton.addEventListener("click", resetDefaults);
 
 if ("serviceWorker" in navigator && ["http:", "https:"].includes(window.location.protocol)) {
   window.addEventListener("load", () => {
-    navigator.serviceWorker.register("./sw.js?v=19").then((registration) => {
+    navigator.serviceWorker.register("./sw.js?v=20").then((registration) => {
       registration.update();
     }).catch(() => {
       // The app still works online when service worker registration is unavailable.

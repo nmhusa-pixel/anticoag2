@@ -1,10 +1,10 @@
-const CACHE_NAME = "anticoag-v2-v19-network-first";
+const CACHE_NAME = "anticoag-v2-v20-procedure-taxonomy";
 const APP_SHELL = [
   "./",
   "./index.html",
-  "./styles.css?v=19",
-  "./app.js?v=19",
-  "./manifest.webmanifest?v=19",
+  "./styles.css?v=20",
+  "./app.js?v=20",
+  "./manifest.webmanifest?v=20",
   "./assets/icons/icon.svg",
   "./assets/icons/icon-192-v5.png",
   "./assets/icons/icon-192-maskable-v5.png",
