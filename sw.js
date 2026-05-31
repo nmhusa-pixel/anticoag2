@@ -1,4 +1,4 @@
-const CACHE_NAME = "anticoag-v2-v16";
+const CACHE_NAME = "anticoag-v2-v18-icons-v5";
 const APP_SHELL = [
   "./",
   "./index.html",
@@ -14,6 +14,8 @@ const APP_SHELL = [
   "./assets/icons/icon-192-maskable-v3.png",
   "./assets/icons/icon-192-v4.png",
   "./assets/icons/icon-192-maskable-v4.png",
+  "./assets/icons/icon-192-v5.png",
+  "./assets/icons/icon-192-maskable-v5.png",
   "./assets/icons/icon-512.png",
   "./assets/icons/icon-512-maskable.png",
   "./assets/icons/icon-512-v2.png",
@@ -21,7 +23,9 @@ const APP_SHELL = [
   "./assets/icons/icon-512-v3.png",
   "./assets/icons/icon-512-maskable-v3.png",
   "./assets/icons/icon-512-v4.png",
-  "./assets/icons/icon-512-maskable-v4.png"
+  "./assets/icons/icon-512-maskable-v4.png",
+  "./assets/icons/icon-512-v5.png",
+  "./assets/icons/icon-512-maskable-v5.png"
 ];
 
 self.addEventListener("install", (event) => {

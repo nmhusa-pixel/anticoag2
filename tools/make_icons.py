@@ -76,12 +76,11 @@ def stroke_near_segment(px, py, ax, ay, bx, by, width):
 
 
 def make_icon(size, maskable=False):
-    bg = (16, 24, 32, 255)
-    panel = (24, 37, 48, 255)
-    teal = (49, 92, 109, 255)
-    bone = (223, 248, 255, 255)
-    glow = (135, 215, 233, 255)
-    soft = (135, 215, 233, 80)
+    bg = (0, 76, 58, 255)
+    panel = (0, 102, 77, 255)
+    bone = (233, 255, 245, 255)
+    glow = (242, 201, 76, 255)
+    soft = (242, 201, 76, 72)
 
     pixels = []
     scale = size / 512
@@ -137,7 +136,7 @@ def make_icon(size, maskable=False):
 def main():
     ICON_DIR.mkdir(parents=True, exist_ok=True)
     for size in (192, 512):
-        for version in ("", "-v2", "-v3", "-v4"):
+        for version in ("", "-v2", "-v3", "-v4", "-v5"):
             (ICON_DIR / f"icon-{size}{version}.png").write_bytes(make_icon(size))
             (ICON_DIR / f"icon-{size}-maskable{version}.png").write_bytes(make_icon(size, maskable=True))
 

@@ -1,16 +1,17 @@
 :root {
-  --bg: #f2f5f3;
-  --ink: #1d2730;
-  --muted: #65737c;
-  --line: #d5dedb;
+  --bg: #f4f7f1;
+  --ink: #17332b;
+  --muted: #5f746d;
+  --line: #d4e1d8;
   --panel: #ffffff;
-  --green: #18705a;
-  --amber: #b66c22;
+  --green: #007155;
+  --amber: #c89a2b;
   --red: #bd4144;
-  --blue: #315c6d;
-  --teal: #0f766e;
-  --plum: #74435f;
-  --shadow: 0 22px 68px rgba(36, 48, 56, 0.14);
+  --blue: #225c4d;
+  --teal: #2d8c72;
+  --plum: #00664d;
+  --gold: #f2c94c;
+  --shadow: 0 22px 68px rgba(0, 91, 70, 0.14);
 }
 
 * {
@@ -22,9 +23,9 @@ body {
   min-height: 100vh;
   color: var(--ink);
   background:
-    radial-gradient(circle at 16% 0%, rgba(15, 118, 110, 0.14), transparent 34%),
-    linear-gradient(110deg, rgba(116, 67, 95, 0.11), transparent 38%),
-    linear-gradient(180deg, #edf4f0 0, var(--bg) 300px);
+    radial-gradient(circle at 14% 0%, rgba(0, 113, 85, 0.16), transparent 34%),
+    linear-gradient(112deg, rgba(242, 201, 76, 0.15), transparent 42%),
+    linear-gradient(180deg, #edf6ef 0, var(--bg) 300px);
   font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
 
@@ -67,7 +68,7 @@ a {
 
 .eyebrow {
   margin-bottom: 7px;
-  color: var(--plum);
+  color: var(--green);
   font-size: 0.76rem;
   font-weight: 800;
   letter-spacing: 0.08em;
@@ -113,7 +114,7 @@ a {
   min-height: 42px;
   border: 1px solid var(--line);
   background: var(--panel);
-  color: var(--blue);
+  color: var(--green);
   border-radius: 999px;
 }
 
@@ -215,14 +216,14 @@ optgroup {
   padding: 12px;
   border: 1px solid var(--line);
   border-radius: 8px;
-  background: linear-gradient(90deg, #f7fbfa, #fbf8f9);
+  background: linear-gradient(90deg, #f6fbf7, #fffaf0);
 }
 
 .risk-summary span {
   min-width: 108px;
   padding: 8px 10px;
   border-radius: 999px;
-  background: var(--plum);
+  background: var(--green);
   color: #fff;
   font-size: 0.75rem;
   font-weight: 850;
@@ -236,6 +237,7 @@ optgroup {
 
 .risk-summary span.intermediate {
   background: var(--amber);
+  color: #17332b;
 }
 
 .risk-summary span.high {
@@ -283,6 +285,7 @@ input[type="checkbox"] {
 
 .result-band.wait {
   background: var(--amber);
+  color: #17332b;
 }
 
 .result-band.stop {
@@ -333,7 +336,7 @@ input[type="checkbox"] {
   width: 0%;
   height: 100%;
   border-radius: inherit;
-  background: linear-gradient(90deg, var(--plum), var(--teal), var(--green));
+  background: linear-gradient(90deg, var(--green), var(--teal), var(--gold));
   transition: width 180ms ease;
 }
 
@@ -387,7 +390,7 @@ input[type="checkbox"] {
   top: 52px;
   width: 42px;
   height: 42px;
-  background: var(--red);
+  background: var(--gold);
 }
 
 .spine-visual span:nth-child(3) {
@@ -403,7 +406,7 @@ input[type="checkbox"] {
   top: 41px;
   width: 22px;
   height: 66px;
-  background: var(--plum);
+  background: var(--green);
 }
 
 .quiet {
