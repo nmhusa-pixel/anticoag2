@@ -126,6 +126,13 @@ a {
   white-space: nowrap;
 }
 
+.top-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
 .icon-button {
   width: 42px;
   font-size: 1.18rem;

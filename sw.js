@@ -1,29 +1,13 @@
-const CACHE_NAME = "anticoag-v2-v18-icons-v5";
+const CACHE_NAME = "anticoag-v2-v19-network-first";
 const APP_SHELL = [
   "./",
   "./index.html",
-  "./styles.css",
-  "./app.js",
-  "./manifest.webmanifest",
+  "./styles.css?v=19",
+  "./app.js?v=19",
+  "./manifest.webmanifest?v=19",
   "./assets/icons/icon.svg",
-  "./assets/icons/icon-192.png",
-  "./assets/icons/icon-192-maskable.png",
-  "./assets/icons/icon-192-v2.png",
-  "./assets/icons/icon-192-maskable-v2.png",
-  "./assets/icons/icon-192-v3.png",
-  "./assets/icons/icon-192-maskable-v3.png",
-  "./assets/icons/icon-192-v4.png",
-  "./assets/icons/icon-192-maskable-v4.png",
   "./assets/icons/icon-192-v5.png",
   "./assets/icons/icon-192-maskable-v5.png",
-  "./assets/icons/icon-512.png",
-  "./assets/icons/icon-512-maskable.png",
-  "./assets/icons/icon-512-v2.png",
-  "./assets/icons/icon-512-maskable-v2.png",
-  "./assets/icons/icon-512-v3.png",
-  "./assets/icons/icon-512-maskable-v3.png",
-  "./assets/icons/icon-512-v4.png",
-  "./assets/icons/icon-512-maskable-v4.png",
   "./assets/icons/icon-512-v5.png",
   "./assets/icons/icon-512-maskable-v5.png"
 ];
@@ -46,11 +30,29 @@ self.addEventListener("activate", (event) => {
 
 self.addEventListener("fetch", (event) => {
   if (event.request.method !== "GET") return;
+  const url = new URL(event.request.url);
+  if (url.origin !== self.location.origin) return;
+
+  if (event.request.mode === "navigate") {
+    event.respondWith(
+      fetch(event.request)
+        .then((response) => {
+          const copy = response.clone();
+          caches.open(CACHE_NAME).then((cache) => cache.put("./index.html", copy));
+          return response;
+        })
+        .catch(() => caches.match("./index.html"))
+    );
+    return;
+  }
 
   event.respondWith(
-    caches.match(event.request).then((cached) => {
-      if (cached) return cached;
-      return fetch(event.request).catch(() => caches.match("./index.html"));
-    })
+    fetch(event.request)
+      .then((response) => {
+        const copy = response.clone();
+        caches.open(CACHE_NAME).then((cache) => cache.put(event.request, copy));
+        return response;
+      })
+      .catch(() => caches.match(event.request).then((cached) => cached || caches.match("./index.html")))
   );
 });

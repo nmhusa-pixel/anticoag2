@@ -1,4 +1,5 @@
 const HOUR = 60 * 60 * 1000;
+const APP_BUILD = "Build v19";
 
 const procedureTypes = {
   neuraxial: {
@@ -695,6 +696,7 @@ function tickClock() {
 populateProcedures();
 populateMedication();
 populateDoseOptions();
+document.querySelector("#buildChip").textContent = APP_BUILD;
 resetDefaults();
 tickClock();
 setInterval(tickClock, 30000);
@@ -713,7 +715,9 @@ el.resetButton.addEventListener("click", resetDefaults);
 
 if ("serviceWorker" in navigator && ["http:", "https:"].includes(window.location.protocol)) {
   window.addEventListener("load", () => {
-    navigator.serviceWorker.register("./sw.js").catch(() => {
+    navigator.serviceWorker.register("./sw.js?v=19").then((registration) => {
+      registration.update();
+    }).catch(() => {
       // The app still works online when service worker registration is unavailable.
     });
   });
