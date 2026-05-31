@@ -1,10 +1,10 @@
-const CACHE_NAME = "anticoag-v2-v22-mild";
+const CACHE_NAME = "anticoag-v2-v23-high-risk-additions";
 const APP_SHELL = [
   "./",
   "./index.html",
-  "./styles.css?v=22",
-  "./app.js?v=22",
-  "./manifest.webmanifest?v=22",
+  "./styles.css?v=23",
+  "./app.js?v=23",
+  "./manifest.webmanifest?v=23",
   "./assets/icons/icon.svg",
   "./assets/icons/icon-192-v5.png",
   "./assets/icons/icon-192-maskable-v5.png",

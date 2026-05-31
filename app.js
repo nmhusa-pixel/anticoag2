@@ -1,5 +1,5 @@
 const HOUR = 60 * 60 * 1000;
-const APP_BUILD = "Build v22";
+const APP_BUILD = "Build v23";
 
 const procedureTypes = {
   neuraxial: {
@@ -37,6 +37,18 @@ const procedureTypes = {
     group: "High-risk pain procedures",
     risk: "high",
     text: "High-risk pain procedure: vertebral augmentation."
+  },
+  basivertebralNerveAblation: {
+    label: "Basivertebral nerve ablation",
+    group: "High-risk pain procedures",
+    risk: "high",
+    text: "High-risk pain procedure: basivertebral nerve ablation."
+  },
+  sacroiliacJointFusion: {
+    label: "Sacroiliac joint fusion",
+    group: "High-risk pain procedures",
+    risk: "high",
+    text: "High-risk pain procedure: sacroiliac joint fusion."
   },
   decompressionLaminotomy: {
     label: "Percutaneous decompression laminotomy",
@@ -733,7 +745,7 @@ el.resetButton.addEventListener("click", resetDefaults);
 
 if ("serviceWorker" in navigator && ["http:", "https:"].includes(window.location.protocol)) {
   window.addEventListener("load", () => {
-    navigator.serviceWorker.register("./sw.js?v=22").then((registration) => {
+    navigator.serviceWorker.register("./sw.js?v=23").then((registration) => {
       registration.update();
     }).catch(() => {
       // The app still works online when service worker registration is unavailable.
