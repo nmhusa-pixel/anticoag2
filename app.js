@@ -1,5 +1,6 @@
 const HOUR = 60 * 60 * 1000;
-const APP_BUILD = "Build v29";
+const APP_BUILD = "Build v30";
+let deferredInstallPrompt = null;
 
 const procedureTypes = {
   neuraxial: {
@@ -411,6 +412,7 @@ const el = {
   selectedRuleTitle: document.querySelector("#selectedRuleTitle"),
   selectedRuleText: document.querySelector("#selectedRuleText"),
   resetButton: document.querySelector("#resetButton"),
+  installButton: document.querySelector("#installButton"),
   clockChip: document.querySelector("#clockChip")
 };
 
@@ -791,6 +793,20 @@ function tickClock() {
   }).format(new Date());
 }
 
+function isInstalledApp() {
+  return window.matchMedia("(display-mode: standalone)").matches || window.navigator.standalone === true;
+}
+
+function updateInstallButton() {
+  if (isInstalledApp()) {
+    el.installButton.textContent = "Installed";
+    el.installButton.disabled = true;
+    return;
+  }
+  el.installButton.textContent = "Install now";
+  el.installButton.disabled = false;
+}
+
 populateProcedures();
 populateMedication();
 populateDoseOptions();
@@ -810,6 +826,18 @@ document.querySelectorAll("select, input").forEach((node) => {
 });
 
 el.resetButton.addEventListener("click", resetDefaults);
+
+el.installButton.addEventListener("click", async () => {
+  if (isInstalledApp()) return;
+  if (!deferredInstallPrompt) {
+    window.alert("To install, open this app from HTTPS or localhost. On iPhone or iPad, use Share > Add to Home Screen.");
+    return;
+  }
+  deferredInstallPrompt.prompt();
+  await deferredInstallPrompt.userChoice;
+  deferredInstallPrompt = null;
+  updateInstallButton();
+});
 
 el.procedurePickerButton.addEventListener("click", toggleProcedurePicker);
 
@@ -845,9 +873,22 @@ document.addEventListener("click", (event) => {
   }
 });
 
+window.addEventListener("beforeinstallprompt", (event) => {
+  event.preventDefault();
+  deferredInstallPrompt = event;
+  updateInstallButton();
+});
+
+window.addEventListener("appinstalled", () => {
+  deferredInstallPrompt = null;
+  updateInstallButton();
+});
+
+updateInstallButton();
+
 if ("serviceWorker" in navigator && ["http:", "https:"].includes(window.location.protocol)) {
   window.addEventListener("load", () => {
-    navigator.serviceWorker.register("./sw.js?v=29").then((registration) => {
+    navigator.serviceWorker.register("./sw.js?v=30").then((registration) => {
       registration.update();
     }).catch(() => {
       // The app still works online when service worker registration is unavailable.

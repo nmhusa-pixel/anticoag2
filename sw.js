@@ -1,10 +1,10 @@
-const CACHE_NAME = "anticoag-guidelines-v29-recommended-last-dose";
+const CACHE_NAME = "anticoag-guidelines-v30-install-button";
 const APP_SHELL = [
   "./",
   "./index.html",
-  "./styles.css?v=29",
-  "./app.js?v=29",
-  "./manifest.webmanifest?v=29",
+  "./styles.css?v=30",
+  "./app.js?v=30",
+  "./manifest.webmanifest?v=30",
   "./assets/icons/icon.svg",
   "./assets/icons/icon-192-v5.png",
   "./assets/icons/icon-192-maskable-v5.png",

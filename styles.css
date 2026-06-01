@@ -126,6 +126,25 @@ a {
   white-space: nowrap;
 }
 
+.install-button {
+  font: inherit;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.install-button:hover,
+.install-button:focus {
+  border-color: var(--green);
+  background: #f2faf6;
+  outline: none;
+}
+
+.install-button:disabled {
+  color: #8a99a6;
+  background: #eef2f4;
+  cursor: default;
+}
+
 .top-actions {
   display: flex;
   flex-wrap: wrap;
