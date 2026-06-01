@@ -1,5 +1,5 @@
 const HOUR = 60 * 60 * 1000;
-const APP_BUILD = "Build v27";
+const APP_BUILD = "Build v29";
 
 const procedureTypes = {
   neuraxial: {
@@ -402,6 +402,7 @@ const el = {
   catheterRemoval: document.querySelector("#catheterRemoval"),
   bloodyTap: document.querySelector("#bloodyTap"),
   riskBand: document.querySelector("#riskBand"),
+  timingAnchorLabel: document.querySelector("#timingAnchorLabel"),
   earliestTime: document.querySelector("#earliestTime"),
   minimumHold: document.querySelector("#minimumHold"),
   restartGuidance: document.querySelector("#restartGuidance"),
@@ -676,9 +677,28 @@ function calculate() {
   if (el.renal.value === "unknown" && ["dabigatran", "rivaroxaban"].includes(ruleId)) notes.push("Renal function is required for the most reliable DOAC timing decision.");
   if (context === "catheter") notes.push(rule.catheter);
 
+  const latestLastDose = plannedProcedure && Number.isFinite(holdHours) ? new Date(plannedProcedure.getTime() - holdHours * HOUR) : null;
+
   if (!lastDose) {
+    el.timingAnchorLabel.textContent = "Recommended last dose";
+    if (plannedProcedure && !Number.isFinite(holdHours)) {
+      el.riskBand.className = "result-band stop";
+      el.riskBand.textContent = "Do not proceed without specialist review and documented drug clearance";
+      el.earliestTime.textContent = "Lab-confirmed clearance required";
+      el.elapsedBar.style.width = "0%";
+      setNotes(notes);
+      return;
+    }
+    if (latestLastDose) {
+      el.riskBand.className = "result-band ready";
+      el.riskBand.textContent = holdHours === 0 ? "No pre-procedure hold required" : "Recommended last-dose time calculated";
+      el.earliestTime.textContent = holdHours === 0 ? "No hold required" : formatDate(latestLastDose);
+      el.elapsedBar.style.width = "0%";
+      setNotes(notes);
+      return;
+    }
     el.riskBand.className = "result-band";
-    el.riskBand.textContent = "Enter the last dose time";
+    el.riskBand.textContent = "Enter the planned injection time";
     el.earliestTime.textContent = "--";
     el.elapsedBar.style.width = "0%";
     setNotes(notes);
@@ -687,6 +707,7 @@ function calculate() {
 
   let earliest = Number.isFinite(holdHours) ? new Date(lastDose.getTime() + holdHours * HOUR) : null;
   if (!earliest) {
+    el.timingAnchorLabel.textContent = "Recommended last dose";
     el.riskBand.className = "result-band stop";
     el.riskBand.textContent = "Do not proceed without specialist review and documented drug clearance";
     el.earliestTime.textContent = "Lab-confirmed clearance required";
@@ -696,6 +717,7 @@ function calculate() {
   }
 
   if (context === "catheter" && el.catheterAction.value === "restart" && removal) {
+    el.timingAnchorLabel.textContent = "Earliest restart";
     if (!Number.isFinite(restartHours)) {
       el.earliestTime.textContent = "Specialist-directed restart";
       el.riskBand.className = "result-band stop";
@@ -714,6 +736,7 @@ function calculate() {
   }
 
   if (!plannedProcedure) {
+    el.timingAnchorLabel.textContent = "Earliest procedure time";
     el.riskBand.className = "result-band";
     el.riskBand.textContent = "Enter the planned injection time";
     el.earliestTime.textContent = formatDate(earliest);
@@ -725,7 +748,8 @@ function calculate() {
   const elapsed = (plannedProcedure.getTime() - lastDose.getTime()) / HOUR;
   const progress = Number.isFinite(holdHours) && holdHours > 0 ? Math.max(0, Math.min(100, elapsed / holdHours * 100)) : 100;
   el.elapsedBar.style.width = `${progress}%`;
-  el.earliestTime.textContent = formatDate(earliest);
+  el.timingAnchorLabel.textContent = "Recommended last dose";
+  el.earliestTime.textContent = holdHours === 0 ? "No hold required" : formatDate(latestLastDose);
 
   if (holdHours === 0 || plannedProcedure >= earliest) {
     el.riskBand.className = "result-band ready";
@@ -823,7 +847,7 @@ document.addEventListener("click", (event) => {
 
 if ("serviceWorker" in navigator && ["http:", "https:"].includes(window.location.protocol)) {
   window.addEventListener("load", () => {
-    navigator.serviceWorker.register("./sw.js?v=27").then((registration) => {
+    navigator.serviceWorker.register("./sw.js?v=29").then((registration) => {
       registration.update();
     }).catch(() => {
       // The app still works online when service worker registration is unavailable.

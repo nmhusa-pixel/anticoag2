@@ -1,10 +1,10 @@
-const CACHE_NAME = "anticoag-guidelines-v27-procedure-picker";
+const CACHE_NAME = "anticoag-guidelines-v29-recommended-last-dose";
 const APP_SHELL = [
   "./",
   "./index.html",
-  "./styles.css?v=27",
-  "./app.js?v=27",
-  "./manifest.webmanifest?v=27",
+  "./styles.css?v=29",
+  "./app.js?v=29",
+  "./manifest.webmanifest?v=29",
   "./assets/icons/icon.svg",
   "./assets/icons/icon-192-v5.png",
   "./assets/icons/icon-192-maskable-v5.png",
