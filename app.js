@@ -1,5 +1,5 @@
 const HOUR = 60 * 60 * 1000;
-const APP_BUILD = "Build v26";
+const APP_BUILD = "Build v27";
 
 const procedureTypes = {
   neuraxial: {
@@ -385,6 +385,10 @@ const rules = {
 
 const el = {
   procedureType: document.querySelector("#procedureType"),
+  procedurePicker: document.querySelector("#procedurePicker"),
+  procedurePickerButton: document.querySelector("#procedurePickerButton"),
+  procedurePickerText: document.querySelector("#procedurePickerText"),
+  procedurePickerMenu: document.querySelector("#procedurePickerMenu"),
   bleedingModifier: document.querySelector("#bleedingModifier"),
   procedureRiskPill: document.querySelector("#procedureRiskPill"),
   procedureRiskText: document.querySelector("#procedureRiskText"),
@@ -448,12 +452,57 @@ function populateProcedures() {
       optgroup.label = procedure.group;
       groups.set(procedure.group, optgroup);
       el.procedureType.append(optgroup);
+
+      const groupHeading = document.createElement("div");
+      groupHeading.className = "procedure-picker-group";
+      groupHeading.textContent = procedure.group;
+      el.procedurePickerMenu.append(groupHeading);
     }
     const option = document.createElement("option");
     option.value = id;
     option.textContent = procedure.label;
     groups.get(procedure.group).append(option);
+
+    const pickerOption = document.createElement("button");
+    pickerOption.className = "procedure-picker-option";
+    pickerOption.type = "button";
+    pickerOption.id = `procedure-option-${id}`;
+    pickerOption.role = "option";
+    pickerOption.dataset.value = id;
+    pickerOption.textContent = procedure.label;
+    pickerOption.addEventListener("click", () => {
+      el.procedureType.value = id;
+      updateProcedurePicker();
+      closeProcedurePicker();
+      calculate();
+    });
+    el.procedurePickerMenu.append(pickerOption);
   });
+  updateProcedurePicker();
+}
+
+function updateProcedurePicker() {
+  const selected = procedureTypes[el.procedureType.value];
+  if (!selected) return;
+  el.procedurePickerText.textContent = selected.label;
+  el.procedurePickerMenu.querySelectorAll(".procedure-picker-option").forEach((option) => {
+    const isSelected = option.dataset.value === el.procedureType.value;
+    option.setAttribute("aria-selected", String(isSelected));
+  });
+}
+
+function closeProcedurePicker() {
+  el.procedurePicker.classList.remove("open");
+  el.procedurePickerButton.setAttribute("aria-expanded", "false");
+}
+
+function toggleProcedurePicker() {
+  const isOpen = el.procedurePicker.classList.toggle("open");
+  el.procedurePickerButton.setAttribute("aria-expanded", String(isOpen));
+  if (isOpen) {
+    const selectedOption = el.procedurePickerMenu.querySelector("[aria-selected='true']");
+    selectedOption?.scrollIntoView({ block: "nearest" });
+  }
 }
 
 function populateMedication() {
@@ -588,6 +637,7 @@ function setNotes(notes) {
 }
 
 function calculate() {
+  updateProcedurePicker();
   const ruleId = el.medication.value;
   const rule = rules[ruleId];
   const selectedProcedure = procedureTypes[el.procedureType.value];
@@ -737,9 +787,43 @@ document.querySelectorAll("select, input").forEach((node) => {
 
 el.resetButton.addEventListener("click", resetDefaults);
 
+el.procedurePickerButton.addEventListener("click", toggleProcedurePicker);
+
+el.procedurePickerButton.addEventListener("keydown", (event) => {
+  if (event.key === "ArrowDown" || event.key === "Enter" || event.key === " ") {
+    event.preventDefault();
+    el.procedurePicker.classList.add("open");
+    el.procedurePickerButton.setAttribute("aria-expanded", "true");
+    const selectedOption = el.procedurePickerMenu.querySelector("[aria-selected='true']");
+    selectedOption?.focus();
+  }
+});
+
+el.procedurePickerMenu.addEventListener("keydown", (event) => {
+  const options = [...el.procedurePickerMenu.querySelectorAll(".procedure-picker-option")];
+  const currentIndex = options.indexOf(document.activeElement);
+  if (event.key === "Escape") {
+    event.preventDefault();
+    closeProcedurePicker();
+    el.procedurePickerButton.focus();
+  } else if (event.key === "ArrowDown") {
+    event.preventDefault();
+    options[Math.min(currentIndex + 1, options.length - 1)]?.focus();
+  } else if (event.key === "ArrowUp") {
+    event.preventDefault();
+    options[Math.max(currentIndex - 1, 0)]?.focus();
+  }
+});
+
+document.addEventListener("click", (event) => {
+  if (!el.procedurePicker.contains(event.target)) {
+    closeProcedurePicker();
+  }
+});
+
 if ("serviceWorker" in navigator && ["http:", "https:"].includes(window.location.protocol)) {
   window.addEventListener("load", () => {
-    navigator.serviceWorker.register("./sw.js?v=26").then((registration) => {
+    navigator.serviceWorker.register("./sw.js?v=27").then((registration) => {
       registration.update();
     }).catch(() => {
       // The app still works online when service worker registration is unavailable.

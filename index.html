@@ -8,12 +8,12 @@
     <meta name="apple-mobile-web-app-title" content="Anticoag Guidelines">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <title>Anticoag Guidelines</title>
-    <link rel="manifest" href="manifest.webmanifest?v=26">
+    <link rel="manifest" href="manifest.webmanifest?v=27">
     <link rel="icon" href="assets/icons/icon-192-v5.png" sizes="192x192" type="image/png">
     <link rel="icon" href="assets/icons/icon-512-v5.png" sizes="512x512" type="image/png">
     <link rel="icon" href="assets/icons/icon.svg" type="image/svg+xml">
     <link rel="apple-touch-icon" href="assets/icons/icon-192-v5.png">
-    <link rel="stylesheet" href="styles.css?v=26">
+    <link rel="stylesheet" href="styles.css?v=27">
   </head>
   <body>
     <header class="topbar">
@@ -22,7 +22,7 @@
         <h1>Anticoag Guidelines</h1>
       </div>
       <div class="top-actions">
-        <div class="status-chip" id="buildChip">Build v26</div>
+        <div class="status-chip" id="buildChip">Build v27</div>
         <div class="status-chip" id="clockChip">Local time</div>
       </div>
     </header>
@@ -40,7 +40,13 @@
         <div class="grid two">
           <label>
             Procedure
-            <select id="procedureType"></select>
+            <select id="procedureType" class="native-procedure-select" aria-hidden="true" tabindex="-1"></select>
+            <div class="procedure-picker" id="procedurePicker">
+              <button class="procedure-picker-button" id="procedurePickerButton" type="button" aria-haspopup="listbox" aria-expanded="false">
+                <span id="procedurePickerText">Regional / deep plexus block</span>
+              </button>
+              <div class="procedure-picker-menu" id="procedurePickerMenu" role="listbox" aria-label="Procedure"></div>
+            </div>
           </label>
           <label>
             Bleeding-risk modifiers
@@ -169,6 +175,6 @@
       </aside>
     </main>
 
-    <script src="app.js?v=26"></script>
+    <script src="app.js?v=27"></script>
   </body>
 </html>
