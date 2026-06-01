@@ -8,12 +8,12 @@
     <meta name="apple-mobile-web-app-title" content="Anticoag Guidelines">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <title>Anticoag Guidelines</title>
-    <link rel="manifest" href="manifest.webmanifest?v=27">
+    <link rel="manifest" href="manifest.webmanifest?v=28">
     <link rel="icon" href="assets/icons/icon-192-v5.png" sizes="192x192" type="image/png">
     <link rel="icon" href="assets/icons/icon-512-v5.png" sizes="512x512" type="image/png">
     <link rel="icon" href="assets/icons/icon.svg" type="image/svg+xml">
     <link rel="apple-touch-icon" href="assets/icons/icon-192-v5.png">
-    <link rel="stylesheet" href="styles.css?v=27">
+    <link rel="stylesheet" href="styles.css?v=28">
   </head>
   <body>
     <header class="topbar">
@@ -22,7 +22,7 @@
         <h1>Anticoag Guidelines</h1>
       </div>
       <div class="top-actions">
-        <div class="status-chip" id="buildChip">Build v27</div>
+        <div class="status-chip" id="buildChip">Build v28</div>
         <div class="status-chip" id="clockChip">Local time</div>
       </div>
     </header>
@@ -75,12 +75,12 @@
 
         <div class="grid three">
           <label>
-            Last dose
-            <input id="lastDose" type="datetime-local">
-          </label>
-          <label>
             Planned injection
             <input id="procedureTime" type="datetime-local">
+          </label>
+          <label>
+            Last dose
+            <input id="lastDose" type="datetime-local">
           </label>
           <label>
             CrCl / eGFR
@@ -120,7 +120,7 @@
           <div class="result-band" id="riskBand">Choose a medication</div>
           <div class="result-main">
             <div>
-              <p class="label">Earliest procedure time</p>
+              <p class="label" id="timingAnchorLabel">Latest last dose</p>
               <strong id="earliestTime">--</strong>
             </div>
             <div>
@@ -175,6 +175,6 @@
       </aside>
     </main>
 
-    <script src="app.js?v=27"></script>
+    <script src="app.js?v=28"></script>
   </body>
 </html>
