@@ -1,10 +1,10 @@
-const CACHE_NAME = "anticoag-guidelines-v31-trade-names";
+const CACHE_NAME = "anticoag-guidelines-v32-exclusive-timing-inputs";
 const APP_SHELL = [
   "./",
   "./index.html",
-  "./styles.css?v=31",
-  "./app.js?v=31",
-  "./manifest.webmanifest?v=31",
+  "./styles.css?v=32",
+  "./app.js?v=32",
+  "./manifest.webmanifest?v=32",
   "./assets/icons/icon.svg",
   "./assets/icons/icon-192-v5.png",
   "./assets/icons/icon-192-maskable-v5.png",

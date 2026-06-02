@@ -179,6 +179,11 @@ fieldset {
   font-weight: 750;
 }
 
+.timing-field {
+  color: var(--ink);
+  font-weight: 900;
+}
+
 select,
 input {
   width: 100%;
@@ -297,6 +302,10 @@ input:disabled {
   color: #8a99a6;
   background: #eef2f4;
   cursor: not-allowed;
+}
+
+label:has(input:disabled) {
+  color: #8a99a6;
 }
 
 optgroup {

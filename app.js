@@ -1,6 +1,7 @@
 const HOUR = 60 * 60 * 1000;
-const APP_BUILD = "Build v31";
+const APP_BUILD = "Build v32";
 let deferredInstallPrompt = null;
+let timingMode = null;
 
 const procedureTypes = {
   neuraxial: {
@@ -532,6 +533,28 @@ function inputDate(node) {
   return node.value ? new Date(node.value) : null;
 }
 
+function syncTimingInputs() {
+  if (el.procedureTime.value && el.lastDose.value) {
+    if (timingMode === "lastDose") {
+      el.procedureTime.value = "";
+    } else {
+      el.lastDose.value = "";
+      timingMode = "procedureTime";
+    }
+  }
+
+  if (el.procedureTime.value) {
+    timingMode = "procedureTime";
+  } else if (el.lastDose.value) {
+    timingMode = "lastDose";
+  } else {
+    timingMode = null;
+  }
+
+  el.lastDose.disabled = timingMode === "procedureTime";
+  el.procedureTime.disabled = timingMode === "lastDose";
+}
+
 function currentParams() {
   return {
     dose: el.doseType.value,
@@ -641,6 +664,7 @@ function setNotes(notes) {
 
 function calculate() {
   updateProcedurePicker();
+  syncTimingInputs();
   const ruleId = el.medication.value;
   const rule = rules[ruleId];
   const selectedProcedure = procedureTypes[el.procedureType.value];
@@ -700,7 +724,7 @@ function calculate() {
       return;
     }
     el.riskBand.className = "result-band";
-    el.riskBand.textContent = "Enter the planned injection time";
+    el.riskBand.textContent = "Enter planned injection or last dose";
     el.earliestTime.textContent = "--";
     el.elapsedBar.style.width = "0%";
     setNotes(notes);
@@ -739,8 +763,8 @@ function calculate() {
 
   if (!plannedProcedure) {
     el.timingAnchorLabel.textContent = "Earliest procedure time";
-    el.riskBand.className = "result-band";
-    el.riskBand.textContent = "Enter the planned injection time";
+    el.riskBand.className = "result-band ready";
+    el.riskBand.textContent = "Earliest procedure time calculated";
     el.earliestTime.textContent = formatDate(earliest);
     el.elapsedBar.style.width = "0%";
     setNotes(notes);
@@ -770,12 +794,10 @@ function calculate() {
 }
 
 function resetDefaults() {
-  const now = new Date();
-  const last = new Date(now.getTime() - 48 * HOUR);
-  const planned = new Date(now.getTime() + 2 * HOUR);
-  el.lastDose.value = toLocalInput(last);
-  el.procedureTime.value = toLocalInput(planned);
-  el.catheterRemoval.value = toLocalInput(planned);
+  timingMode = null;
+  el.lastDose.value = "";
+  el.procedureTime.value = "";
+  el.catheterRemoval.value = "";
   el.renal.value = "normal";
   el.procedureType.value = "neuraxial";
   el.bleedingModifier.value = "none";
@@ -821,8 +843,41 @@ el.medication.addEventListener("change", () => {
 });
 
 document.querySelectorAll("select, input").forEach((node) => {
+  if (node === el.procedureTime || node === el.lastDose) return;
   node.addEventListener("input", calculate);
   node.addEventListener("change", calculate);
+});
+
+el.procedureTime.addEventListener("input", () => {
+  if (el.procedureTime.value) {
+    timingMode = "procedureTime";
+    el.lastDose.value = "";
+  }
+  calculate();
+});
+
+el.procedureTime.addEventListener("change", () => {
+  if (el.procedureTime.value) {
+    timingMode = "procedureTime";
+    el.lastDose.value = "";
+  }
+  calculate();
+});
+
+el.lastDose.addEventListener("input", () => {
+  if (el.lastDose.value) {
+    timingMode = "lastDose";
+    el.procedureTime.value = "";
+  }
+  calculate();
+});
+
+el.lastDose.addEventListener("change", () => {
+  if (el.lastDose.value) {
+    timingMode = "lastDose";
+    el.procedureTime.value = "";
+  }
+  calculate();
 });
 
 el.resetButton.addEventListener("click", resetDefaults);
@@ -888,7 +943,7 @@ updateInstallButton();
 
 if ("serviceWorker" in navigator && ["http:", "https:"].includes(window.location.protocol)) {
   window.addEventListener("load", () => {
-    navigator.serviceWorker.register("./sw.js?v=31").then((registration) => {
+    navigator.serviceWorker.register("./sw.js?v=32").then((registration) => {
       registration.update();
     }).catch(() => {
       // The app still works online when service worker registration is unavailable.
