@@ -1,5 +1,5 @@
 const HOUR = 60 * 60 * 1000;
-const APP_BUILD = "Build v30";
+const APP_BUILD = "Build v31";
 let deferredInstallPrompt = null;
 
 const procedureTypes = {
@@ -177,7 +177,7 @@ const painRiskOrder = ["low", "intermediate", "high"];
 
 const rules = {
   aspirin: {
-    name: "Aspirin / NSAID",
+    name: "Aspirin / NSAID (Bayer, Advil/Motrin, Aleve)",
     options: [{ id: "standard", label: "Any dose" }],
     holdHours: () => 0,
     restartHours: 0,
@@ -186,7 +186,7 @@ const rules = {
     notes: ["Avoid treating this as low risk when other anticoagulants or antiplatelets are also active."]
   },
   clopidogrel: {
-    name: "Clopidogrel",
+    name: "Clopidogrel (Plavix)",
     options: [{ id: "standard", label: "P2Y12 therapy" }],
     holdHours: () => 5 * 24,
     rangeText: "5-7 days",
@@ -196,7 +196,7 @@ const rules = {
     notes: ["Catheters may be maintained for 1-2 days only if no loading dose is given."]
   },
   prasugrel: {
-    name: "Prasugrel",
+    name: "Prasugrel (Effient)",
     options: [{ id: "standard", label: "P2Y12 therapy" }],
     holdHours: () => 7 * 24,
     rangeText: "7-10 days",
@@ -206,7 +206,7 @@ const rules = {
     notes: ["May be resumed immediately after catheter removal if no loading dose is used."]
   },
   ticagrelor: {
-    name: "Ticagrelor",
+    name: "Ticagrelor (Brilinta)",
     options: [{ id: "standard", label: "P2Y12 therapy" }],
     holdHours: () => 5 * 24,
     rangeText: "5 days",
@@ -216,7 +216,7 @@ const rules = {
     notes: ["Restart is suggested 24 hours after catheter removal or needle placement."]
   },
   cangrelor: {
-    name: "Cangrelor",
+    name: "Cangrelor (Kengreal)",
     options: [{ id: "infusion", label: "IV infusion" }],
     holdHours: () => 3,
     rangeText: "3 hours",
@@ -226,7 +226,7 @@ const rules = {
     notes: ["Restart is suggested 8 hours after catheter removal or needle placement."]
   },
   cilostazol: {
-    name: "Cilostazol",
+    name: "Cilostazol (Pletal)",
     options: [{ id: "standard", label: "Antiplatelet therapy" }],
     holdHours: () => 2 * 24,
     rangeText: "2 days",
@@ -236,7 +236,7 @@ const rules = {
     notes: ["First postoperative dose is suggested 6 hours after catheter removal."]
   },
   warfarin: {
-    name: "Warfarin",
+    name: "Warfarin (Coumadin, Jantoven)",
     options: [{ id: "standard", label: "Chronic therapy" }],
     holdHours: () => 5 * 24,
     rangeText: "5 days plus normalized INR",
@@ -246,7 +246,7 @@ const rules = {
     notes: ["This calculator cannot verify INR. Treat an unknown or elevated INR as not cleared."]
   },
   apixaban: {
-    name: "Apixaban",
+    name: "Apixaban (Eliquis)",
     options: [
       { id: "low", label: "Apixaban 2.5 mg twice daily" },
       { id: "high", label: "Apixaban 5 mg twice daily or higher" }
@@ -260,7 +260,7 @@ const rules = {
     notes: ["High-dose therapy should not be administered until at least 24 hours after needle placement or catheter removal.", "Low-dose therapy restart interval is 6 hours after needle placement or catheter removal."]
   },
   rivaroxaban: {
-    name: "Rivaroxaban",
+    name: "Rivaroxaban (Xarelto)",
     options: [
       { id: "low", label: "Rivaroxaban 10 mg daily or 2.5 mg twice daily" },
       { id: "high", label: "Rivaroxaban 15-20 mg daily" }
@@ -274,7 +274,7 @@ const rules = {
     notes: ["High-dose therapy should not be administered until at least 24 hours after needle placement or catheter removal."]
   },
   edoxaban: {
-    name: "Edoxaban",
+    name: "Edoxaban (Savaysa)",
     options: [
       { id: "low", label: "Edoxaban 30 mg daily" },
       { id: "high", label: "Edoxaban 60 mg daily" }
@@ -287,7 +287,7 @@ const rules = {
     level: "Acceptable level described by the guideline: edoxaban concentration below 30 ng/mL or calibrated anti-Xa activity at or below 0.1 IU/mL."
   },
   dabigatran: {
-    name: "Dabigatran",
+    name: "Dabigatran (Pradaxa)",
     options: [
       { id: "low", label: "Dabigatran 220 mg daily or 75 mg twice daily" },
       { id: "high", label: "Dabigatran 110-150 mg twice daily" }
@@ -310,7 +310,7 @@ const rules = {
     notes: ["This procedure is not suggested when CrCl is below 30 mL/min unless a drug-specific assay confirms acceptable residual activity."]
   },
   argatroban: {
-    name: "Argatroban",
+    name: "Argatroban (generic)",
     options: [{ id: "infusion", label: "IV direct thrombin inhibitor" }],
     holdHours: () => 4,
     rangeText: "4-6 hours plus normal baseline aPTT",
@@ -323,7 +323,7 @@ const rules = {
     notes: ["Argatroban effect may be prolonged in hepatic impairment.", "NYSORA notes that direct thrombin inhibitor effects are monitored via aPTT and last about 3 hours after IV administration, but regional techniques are not recommended in patients taking argatroban or bivalirudin.", "OpenAnesthesia's ASRA summary recommends against these techniques in patients receiving parenteral thrombin inhibitors such as argatroban.", "The Stanford table also lists argatroban IV infusion as avoid techniques; follow local policy and specialist guidance when this differs from a timed institutional protocol."]
   },
   ivHeparin: {
-    name: "Unfractionated heparin IV",
+    name: "Unfractionated heparin IV (heparin)",
     options: [{ id: "infusion", label: "Continuous infusion" }],
     holdHours: () => 4,
     rangeText: "4-6 hours plus normal coagulation status",
@@ -333,7 +333,7 @@ const rules = {
     notes: ["Delay IV heparin administration for at least 1 hour after needle placement.", "Review platelet count if heparin exposure exceeds 4 days."]
   },
   scHeparinLow: {
-    name: "Unfractionated heparin SQ",
+    name: "Unfractionated heparin SQ (heparin)",
     options: [
       { id: "low", label: "5,000 units BID/TID" },
       { id: "intermediate", label: "7,500-10,000 units BID or <= 20,000/day" },
@@ -347,7 +347,7 @@ const rules = {
     notes: ["Assess coagulation status for intermediate and high-dose regimens.", "Review platelet count if heparin exposure exceeds 4 days."]
   },
   enoxaparin: {
-    name: "LMWH / enoxaparin",
+    name: "LMWH / enoxaparin (Lovenox)",
     options: [
       { id: "low", label: "Enoxaparin 40 mg daily or 30 mg every 12 hours" },
       { id: "high", label: "Enoxaparin 1 mg/kg every 12 hours or 1.5 mg/kg daily" }
@@ -360,7 +360,7 @@ const rules = {
     notes: ["For twice-daily low-dose LMWH, first dose should be the following day and at least 12 hours after needle/catheter placement.", "For single-daily low-dose LMWH, remove catheter 12 hours after last dose and restart at least 4 hours after removal."]
   },
   fondaparinux: {
-    name: "Fondaparinux",
+    name: "Fondaparinux (Arixtra)",
     options: [
       { id: "low", label: "Fondaparinux 2.5 mg daily" },
       { id: "high", label: "Treatment dose 5-10 mg daily by weight" }
@@ -373,7 +373,7 @@ const rules = {
     notes: ["Use caution because sustained and irreversible antithrombin-mediated factor Xa inhibition limits rescue options."]
   },
   thrombolytic: {
-    name: "Thrombolytic / fibrinolytic",
+    name: "Thrombolytic / fibrinolytic (Activase, TNKase)",
     options: [{ id: "standard", label: "Alteplase, tenecteplase, similar agents" }],
     holdHours: () => 48,
     rangeText: "At least 48 hours and normal coagulation/fibrinogen",
@@ -888,7 +888,7 @@ updateInstallButton();
 
 if ("serviceWorker" in navigator && ["http:", "https:"].includes(window.location.protocol)) {
   window.addEventListener("load", () => {
-    navigator.serviceWorker.register("./sw.js?v=30").then((registration) => {
+    navigator.serviceWorker.register("./sw.js?v=31").then((registration) => {
       registration.update();
     }).catch(() => {
       // The app still works online when service worker registration is unavailable.
